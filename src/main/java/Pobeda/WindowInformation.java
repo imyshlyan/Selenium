@@ -23,7 +23,5 @@ public class WindowInformation extends MainPagePobeda {
         super(driver);
     }
 
-    public void openInformation() {
-        actions.moveToElement(information).pause(Duration.ofMillis(500)).perform();
-    }
+
 }

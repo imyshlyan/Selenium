@@ -14,6 +14,7 @@ public class PobedaTest {
     WebDriver driver;
     MainPagePobeda mainPobedaPage;
     WindowInformation windowInformation;
+    SearchTicket searchTicket;
 
 
     @BeforeEach
@@ -23,6 +24,7 @@ public class PobedaTest {
         driver.manage().window().maximize();
         mainPobedaPage = new MainPagePobeda(driver);
         windowInformation = new WindowInformation(driver);
+        searchTicket = new SearchTicket(driver);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
     }
@@ -34,11 +36,24 @@ public class PobedaTest {
 
     @Test
     public void popupWindow() {
-        Assertions.assertTrue(mainPobedaPage.getTitleMainPage().contains("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками"));
-        Assertions.assertTrue(mainPobedaPage.logo.isDisplayed());
-        windowInformation.openInformation();
+        mainPobedaPage.logoAndTitleAssert();
+        mainPobedaPage.openInformation();
         Assertions.assertTrue(windowInformation.flightPreparation.isDisplayed());
         Assertions.assertTrue(windowInformation.usefulInformation.isDisplayed());
         Assertions.assertTrue(windowInformation.companyInformation.isDisplayed());
+    }
+
+    @Test
+    public void InitiatingSearching() {
+        mainPobedaPage.logoAndTitleAssert();
+        Assertions.assertTrue(searchTicket.fromWhere.isDisplayed());
+        Assertions.assertTrue(searchTicket.toWhere.isDisplayed());
+        Assertions.assertTrue(searchTicket.departing.isDisplayed());
+        Assertions.assertTrue(searchTicket.returing.isDisplayed());
+        searchTicket.fromWhere.clear();
+        searchTicket.fromWhere.sendKeys("Москва");
+        searchTicket.toWhere.sendKeys("Санкт-Петербург");
+        searchTicket.startSearching();
+        Assertions.assertTrue(searchTicket.departingRedFrame.isDisplayed());
     }
 }
